@@ -1,0 +1,19 @@
+#---Database Settings---
+mysqlHostName: localhost
+mysqlPort: 3306
+mysqlUsername: root
+mysqlPassword:
+mysqlDatabase: EtherMarket
+
+#---General Settings---
+#Excessive debug logging? Please use this and post your console log when asking for help
+debugenabled: true
+#Adds a "Purchased from [username]" lore to valuable, unstackable items that are bought through the shops
+item-receipt: true
+item-receipt-text: Purchased from
+#Logs every transaction in the database
+log-transactions: true
+
+#---DATA---
+#Changing these WILL cause problems if shops and ATMs have been created
+sign-header: [Shop]

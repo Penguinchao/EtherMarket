@@ -1,0 +1,10 @@
+main: com.penguinchao.ethermarket.EtherMarket
+version: 0.1
+name: EtherMarket
+
+commands:
+permissions:
+    ethermarket.admin.destroyothershop: #Allows the destruction of someone else's shop
+        default: op
+    pengumarket.player.makeshop: #Allows the creation of a shop
+        default: true
