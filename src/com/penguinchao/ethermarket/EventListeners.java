@@ -22,10 +22,6 @@ public class EventListeners implements Listener {
 	@EventHandler
 	public void onSignActivate(PlayerInteractEvent event){
 		main.messages.debugOut("PlayerInteractEvent");
-		if(event.isCancelled()){
-			main.messages.debugOut("Event cancelled by another plugin. Returning");
-			return;
-		}
 		Boolean rightClick;
 		Boolean sneaking;
 		Block activatedBlock;
@@ -33,6 +29,8 @@ public class EventListeners implements Listener {
 		if(event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR){
 			main.messages.debugOut("A back-click happened");
 			rightClick = true;
+			main.messages.debugOut("Cancelling event to prevent block dupes");
+			event.setCancelled(true);
 			main.messages.debugOut("Getting Block...");
 			if(event.getAction() == Action.RIGHT_CLICK_BLOCK){
 				main.messages.debugOut("RIGHT_CLICK_BLOCK");
@@ -75,6 +73,9 @@ public class EventListeners implements Listener {
 		main.messages.debugOut("Checking Sign header");
 		if(sign.getLine(0).equals(main.getConfig().getString("sign-header")) ){
 			main.messages.debugOut("Sign is a shop sign");
+			//main.messages.debugOut("Cancelling block click...");
+			//event.setCancelled(true);
+			main.messages.debugOut("Activating Shop...");
 			main.eventFunctions.activateShop(sign, event.getPlayer(), sneaking, rightClick);
 		}else{
 			main.messages.debugOut("Sign is not a shop");
@@ -128,10 +129,6 @@ public class EventListeners implements Listener {
 	}
 	@EventHandler
 	public void onSignDestroy(BlockBreakEvent event){
-		if(event.isCancelled()){
-			main.messages.debugOut("Event cancelled by another plugin. Returning");
-			return;
-		}
 		main.messages.debugOut("BlockBreakEvent");
 		//Check Block Type
 		if(event.getBlock().getType() == Material.SIGN_POST || event.getBlock().getType() == Material.WALL_SIGN){
