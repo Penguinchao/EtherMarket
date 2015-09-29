@@ -3,11 +3,7 @@ This is a chestless shop plugin for Bukkit/Spigot/Cauldron. The shops are stored
 
 
 # TODO:
--Address bug where blocks are placed when the shop is clicked (dupe
-cheat)
--On shop destruction, add inventory to the player, then drop the rest on
-the ground (possibly make a config setting for always dropping on
-ground)
+-Prevent indirect destruction of shop blocks (Creepers, falling sand, etc.)
 -Add functionality to log transactions in the database
 -Prevent the breaking of the block that a sign is attached to
 -Add messages to the users (config)

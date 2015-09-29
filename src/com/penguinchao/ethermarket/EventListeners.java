@@ -20,7 +20,7 @@ public class EventListeners implements Listener {
 	}
 	@SuppressWarnings("deprecation")
 	@EventHandler
-	public void onSignActivate(PlayerInteractEvent event){
+	public void onSignActivate(PlayerInteractEvent event){ //Used to interact with an existing shop
 		main.messages.debugOut("PlayerInteractEvent");
 		Boolean rightClick;
 		Boolean sneaking;
@@ -29,8 +29,6 @@ public class EventListeners implements Listener {
 		if(event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR){
 			main.messages.debugOut("A back-click happened");
 			rightClick = true;
-			main.messages.debugOut("Cancelling event to prevent block dupes");
-			event.setCancelled(true);
 			main.messages.debugOut("Getting Block...");
 			if(event.getAction() == Action.RIGHT_CLICK_BLOCK){
 				main.messages.debugOut("RIGHT_CLICK_BLOCK");
@@ -73,8 +71,10 @@ public class EventListeners implements Listener {
 		main.messages.debugOut("Checking Sign header");
 		if(sign.getLine(0).equals(main.getConfig().getString("sign-header")) ){
 			main.messages.debugOut("Sign is a shop sign");
-			//main.messages.debugOut("Cancelling block click...");
-			//event.setCancelled(true);
+			if(event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR){
+				main.messages.debugOut("Catching right-clicks to prevent block dupes");
+				event.setCancelled(true);
+			}
 			main.messages.debugOut("Activating Shop...");
 			main.eventFunctions.activateShop(sign, event.getPlayer(), sneaking, rightClick);
 		}else{
@@ -82,7 +82,7 @@ public class EventListeners implements Listener {
 		}
 	}
 	@EventHandler
-	public void onSignCreate(SignChangeEvent event){
+	public void onSignCreate(SignChangeEvent event){ //Used to begin creating a shop sign
 		main.messages.debugOut("SignChangeEvent");
 		if(event.isCancelled()){
 			main.messages.debugOut("Event cancelled by another plugin. Returning");
@@ -128,9 +128,12 @@ public class EventListeners implements Listener {
 		main.shops.setMakingShop(event.getPlayer(), event.getPlayer(), event.getBlock().getX(), event.getBlock().getY(), event.getBlock().getZ(), event.getBlock().getWorld());
 	}
 	@EventHandler
-	public void onSignDestroy(BlockBreakEvent event){
+	public void onSignDestroy(BlockBreakEvent event){ //Used to prevent unauthorized, direct destruction of the shop block
 		main.messages.debugOut("BlockBreakEvent");
 		//Check Block Type
+		if(event.getBlock() == null){
+			return;
+		}
 		if(event.getBlock().getType() == Material.SIGN_POST || event.getBlock().getType() == Material.WALL_SIGN){
 			main.messages.debugOut("Player is attempting to destroy a Sign");
 		}else{
@@ -195,8 +198,13 @@ public class EventListeners implements Listener {
 		main.messages.debugOut("Shop destruction is allowed");
 		if(main.eventFunctions.destroyingShop(shopID, event.getPlayer())){
 			main.messages.debugOut("Player is destroying the shop");
+			main.messages.debugOut("Pulling items before destruction");
+			main.shops.emptyShopStock(event.getPlayer(), shopID);
+			main.messages.debugOut("Removing shop from Database");
+			main.shops.deleteShop(shopID);
 			main.shops.unsetDestroyingShop(event.getPlayer().getDisplayName());
 			event.setCancelled(false);
+			main.messages.debugOut("Event Complete");
 			//TODO Success Message
 		}else{
 			main.messages.debugOut("Player is not destroying the shop -- Cancelling Event");

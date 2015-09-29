@@ -456,6 +456,21 @@ public class Shops {
 			main.messages.debugOut("Shop value is not in database -- skipping");
 		}
 	}
+	public void emptyShopStock(Player player, Integer shopID){
+		//Finish this
+		main.messages.debugOut("Giving player shop's contents");
+		ItemStack shopItem = getShopItem(shopID, true, player.getDisplayName() );
+		Integer amountToGive = getStock(shopID);
+		Integer stackSize = shopItem.getMaxStackSize();
+		while(stackSize < amountToGive){
+			main.inventory.softAddItem(shopItem, player);
+			amountToGive -= stackSize;
+		}
+		shopItem.setAmount(amountToGive);
+		main.inventory.softAddItem(shopItem, player);
+		main.messages.debugOut("Shop is now empty");
+		setStock(shopID, 0);
+	}
 	public Boolean shopBeingEstablished(Integer x, Integer y, Integer z, String world){ //Looks through the list of players making shops and determines if the block specified is a shop in-progress
 		main.messages.debugOut("Looking for shop at xyz ("+x+","+y+","+z+"world");
 		for(String value : main.PlayerMakingShop.values() ){
