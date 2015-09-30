@@ -99,7 +99,7 @@ public class EventListeners implements Listener {
 		if(main.shops.isMakingShop(event.getPlayer())==false){
 			main.messages.debugOut("Player is not making a shop");
 		}else{
-			//TODO Player Error message
+			main.messages.configError(event.getPlayer(), "already-making-shop");
 			event.getBlock().breakNaturally();
 			event.setCancelled(true);
 			return;
@@ -108,7 +108,7 @@ public class EventListeners implements Listener {
 		if (event.getPlayer().hasPermission("pengumarket.player.makeshop")){
 			main.messages.debugOut("Player has permission to make a shop");
 		}else{
-			//TODO Player Error message
+			main.messages.configError(event.getPlayer(), "no-permission-creation");
 			main.messages.debugOut("Player did not have permission to make a shop");
 			event.getBlock().breakNaturally();
 			event.setCancelled(true);
@@ -117,8 +117,9 @@ public class EventListeners implements Listener {
 		//Check price syntax
 		if(main.shops.isCorrectPricing(event.getLine(2)) ){
 			main.messages.debugOut("Shop's Syntax is correct");
+			main.messages.configSuccess(event.getPlayer(), "begin-making-shop");
 		}else{
-			//TODO Player Error message
+			main.messages.configError(event.getPlayer(), "incorrect-syntax");
 			event.getBlock().breakNaturally();
 			event.setCancelled(true);
 			return;
@@ -154,7 +155,7 @@ public class EventListeners implements Listener {
 		//Check if shop is currently being established
 		main.messages.debugOut("Checking if a shop is currently being established here");
 		if(main.shops.shopBeingEstablished(event.getBlock().getX(), event.getBlock().getY(), event.getBlock().getZ(), event.getBlock().getWorld().toString() ) ){
-			//TODO Cancellation message
+			main.messages.configError(event.getPlayer(), "shop-being-made");
 			main.messages.debugOut("A shop is currently being made here");
 			event.setCancelled(true);
 			return;
@@ -166,7 +167,7 @@ public class EventListeners implements Listener {
 		Integer shopID = main.shops.getShopID(event.getBlock().getX(), event.getBlock().getY(), event.getBlock().getZ(), event.getBlock().getWorld() );
 		if(shopID.equals(0) ){
 			main.messages.debugOut("Shop id is 0, which means that it does not exist -- This should not happen, so the shop will be destroyed"); 
-			//TODO log this error
+			main.messages.debugOut("An unestablished shop was destroyed.");
 			return;
 		}else{
 			main.messages.debugOut("Shop id is "+shopID);
@@ -179,7 +180,7 @@ public class EventListeners implements Listener {
 		if(event.getPlayer().getUniqueId().equals(shopOwner)){
 			main.messages.debugOut("Player owns the shop");
 		}else{
-			//TODO Cancellation message
+			main.messages.configError(event.getPlayer(), "shop-is-owned");
 			main.messages.debugOut("Player does not own shop");
 			event.setCancelled(true);
 			return;
@@ -190,7 +191,7 @@ public class EventListeners implements Listener {
 			main.messages.debugOut("Player is sneaking");
 		}else{
 			main.messages.debugOut("Player is not sneaking");
-			//TODO Cancellation message
+			main.messages.configError(event.getPlayer(), "not-sneaking");
 			event.setCancelled(true);
 			return;
 		}
@@ -205,10 +206,10 @@ public class EventListeners implements Listener {
 			main.shops.unsetDestroyingShop(event.getPlayer().getDisplayName());
 			event.setCancelled(false);
 			main.messages.debugOut("Event Complete");
-			//TODO Success Message
+			main.messages.configSuccess(event.getPlayer(), "destroy-success");
 		}else{
 			main.messages.debugOut("Player is not destroying the shop -- Cancelling Event");
-			//TODO Send player message letting them know to destroy the shop again
+			main.messages.configSuccess(event.getPlayer(), "destroy-again");
 			event.setCancelled(true);
 			return;
 		}

@@ -35,7 +35,6 @@ public class Shops {
 		return false;
 	}
 	public void setMakingShop(Player owner, Player establisher, Integer x, Integer y, Integer z, World world){ //Adds player to the hashMap plugin.PlayerMakingShop to mark them as making a shop
-		establisher.sendMessage(ChatColor.GREEN + this.main.getConfig().getString("ask-for-item"));
 		UUID ownerID = owner.getUniqueId();
 		UUID establisherID = establisher.getUniqueId();
 		String blockLocation = x + "," + y + "," + z + "," + world.getName()+","+ownerID.toString()+","+establisherID.toString();

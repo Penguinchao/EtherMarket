@@ -6,6 +6,6 @@ This is a chestless shop plugin for Bukkit/Spigot/Cauldron. The shops are stored
 -Prevent indirect destruction of shop blocks (Creepers, falling sand, etc.)
 -Add functionality to log transactions in the database
 -Prevent the breaking of the block that a sign is attached to
--Add messages to the users (config)
 -Add support for multiworld economies
+-Remove player's current shop on logout
 -Possibly add ATM mechanics

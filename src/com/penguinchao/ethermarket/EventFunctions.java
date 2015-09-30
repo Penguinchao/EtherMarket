@@ -36,9 +36,14 @@ public class EventFunctions {
 				org.bukkit.inventory.ItemStack equipped = player.getItemInHand();
 				if(main.shops.isValidMaterial(equipped.getType())){
 					main.shops.establishShop(player.getUniqueId().toString(), player.getUniqueId().toString(), player.getDisplayName(), sign.getX(), sign.getY(), sign.getZ(), sign.getWorld(), equipped, buy, sell);
+					main.messages.configSuccess(player, "shop-established");
+				}else{
+					main.messages.debugOut("Invalid Items");
+					main.messages.configError(player, "invalid-item");
 				}
 			} else {
 				main.messages.debugOut("Player did not hit the shop that he was making");
+				main.messages.configError(player, "finish-other-shop");
 			}
 		} else if( !shopID.equals(0) ){
 			main.messages.debugOut("Player is not making a shop; transacting with this one");

@@ -21,4 +21,10 @@ public class Messages {
 	public void playerSuccess(Player player, String message){
 		player.sendMessage(ChatColor.GREEN + message);
 	}
+	public void configSuccess(Player player, String messageName){
+		playerSuccess(player, main.getConfig().getString(messageName));
+	}
+	public void configError(Player player, String messageName){
+		playerError(player, main.getConfig().getString(messageName));
+	}
 }
