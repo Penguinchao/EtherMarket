@@ -11,6 +11,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 public class EventListeners implements Listener {
 	private EtherMarket main;
@@ -213,5 +214,12 @@ public class EventListeners implements Listener {
 			event.setCancelled(true);
 			return;
 		}
+	}
+	@EventHandler
+	public void onPlayerLogout(PlayerQuitEvent event){
+		//TODO remove player from all lists
+		main.PlayerMakingShop.remove(event.getPlayer().getDisplayName());
+		main.ActivePlayerShop.remove(event.getPlayer().getDisplayName());
+		main.PlayerDestroyingShop.remove(event.getPlayer().getDisplayName());
 	}
 }
