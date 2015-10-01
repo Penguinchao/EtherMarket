@@ -5,14 +5,17 @@ import java.util.UUID;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -220,12 +223,14 @@ public class EventListeners implements Listener {
 	}
 	@EventHandler
 	public void onPlayerLogout(PlayerQuitEvent event){
+		main.messages.debugOut("PlayerQuitEvent");
 		main.PlayerMakingShop.remove(event.getPlayer().getDisplayName());
 		main.ActivePlayerShop.remove(event.getPlayer().getDisplayName());
 		main.PlayerDestroyingShop.remove(event.getPlayer().getDisplayName());
 	}
 	@EventHandler
 	public void onBlockDestroy(BlockBreakEvent event){
+		main.messages.debugOut("BlockBreakEvent");
 		if(main.eventFunctions.isAttachedToShop( event.getBlock() )){
 			if(event.getPlayer() != null){
 				main.messages.configError(event.getPlayer(), "attached-shop");
@@ -235,26 +240,74 @@ public class EventListeners implements Listener {
 			main.messages.debugOut("Block is not attached to a shop");
 		}
 	}
+	
+	//This Event is was commented out, because the physics event will check this 
 	@EventHandler
 	public void onPistonPush(BlockPistonExtendEvent event){
-		//TODO Remember: GetBlock gets the piston
+		main.messages.debugOut("BlockPistonExtendEvent");
 		//Get a hashmap of the blocks moved, then iterate through it
+		if(main.eventFunctions.blocksAttachedToShop(event.getBlocks())){
+			main.messages.debugOut("Cancelling piston push, because shops are attached.");
+			event.setCancelled(true);
+		}
 	}
 	@EventHandler
 	public void onPistonRetract(BlockPistonRetractEvent event){
-		//TODO Remember: GetBlock gets the piston
+		main.messages.debugOut("BlockPistonRetractEvent");
 		//Get a hashmap of the blocks moved, then iterate through it
+		if(main.eventFunctions.isAttachedToShop(event.getRetractLocation().getBlock())){
+			event.setCancelled(true);
+		}
 	}
-	public void onGravityCheck(BlockPhysicsEvent event){
-		if(event.getBlock().getType() == Material.SAND || event.getBlock().getType() == Material.GRAVEL){
-			//This is a block that can fall
+	@EventHandler
+	public void onPhysicsCheck(BlockPhysicsEvent event){
+		//Commented out the debug for the physics events, because it made the console useless
+		//main.messages.debugOut("BlockPhysicsEvent");
+		//if(event.getBlock().getType() == Material.SAND || event.getBlock().getType() == Material.GRAVEL){
+		//	main.messages.debugOut("This is a block that can fall");
 			if(main.eventFunctions.isAttachedToShop(event.getBlock())){
+				main.messages.debugOut("Event would affect a shop block. Cancelling...");
 				event.setCancelled(true);
 			}else{
 				return;
 			}
-		}else{
+		//}else{
+		//	return;
+		//}
+	}
+	@EventHandler
+	public void onBurn(BlockBurnEvent event){
+		if( main.eventFunctions.isAttachedToShop(event.getBlock()) ){
+			event.setCancelled(true);
+		}else if(event.getBlock().getType() == Material.SIGN_POST || event.getBlock().getType() == Material.WALL_SIGN){
+			if(((Sign) event.getBlock().getState()).getLine(0).equals(main.getConfig().getString("sign-header"))){
+				main.messages.debugOut("Preventing burning of a shop");
+				event.setCancelled(true);
+			}else{
+				return;
+			}
+		}else {
 			return;
+		}
+	}
+	@EventHandler
+	public void onExplode(EntityExplodeEvent event){
+		main.messages.debugOut("EntityExplodeEvent");
+		for(Block block : event.blockList()){
+			if(main.eventFunctions.isAttachedToShop(block)){
+				main.messages.debugOut("Event is related to a shop. Removing Block");
+				//event.blockList().clear();
+				event.setCancelled(true);
+			}else if(block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN){
+				main.messages.debugOut("Block is a sign");
+				if( ((Sign) block.getState() ).getLine(0).equals(main.getConfig().getString("sign-header"))){
+					main.messages.debugOut("Event hurts a shop. Removing block");
+					//event.blockList().clear();
+					event.setCancelled(true);
+				}else{
+					main.messages.debugOut("Event sign is not a shop");
+				}
+			}
 		}
 	}
 }
