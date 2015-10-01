@@ -5,6 +5,10 @@ import java.util.HashMap;
 
 import net.milkbowl.vault.economy.Economy;
 
+import org.apache.commons.lang.math.NumberUtils;
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
@@ -26,6 +30,7 @@ public class EtherMarket extends JavaPlugin {
 	public Economy eco;
 	public EventFunctions eventFunctions;
 	public EventListeners eventListeners;
+	public Commands commands;
 	//Methods
 	@Override
 	public void onEnable(){
@@ -39,7 +44,34 @@ public class EtherMarket extends JavaPlugin {
 		vault = new Vault(this);
 		eventFunctions = new EventFunctions(this);
 		eventListeners = new EventListeners(this);
+		commands = new Commands(this);
 		vault.setupEconomy();
 		//TODO Check vault dependencies and database, and if not setup, disable plugin with warning
+	}
+	@Override
+	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) { 
+		if (cmd.getName().equalsIgnoreCase("ethermarket") || cmd.getName().equalsIgnoreCase("em") ){
+			if(args.length == 0){
+				//Player gave no arguments -- Sending plugin list
+				commands.showHelp(sender);
+			}else if(args[0].equalsIgnoreCase("setstock")){
+				//Player attempting to setstock
+				if(args.length == 2){
+					if(NumberUtils.isNumber(args[1])){
+						Integer newStock = Integer.parseInt(args[1]);
+						if( (newStock % 1) == 0 ){
+							commands.setStock(sender, newStock);
+						}else{
+							sender.sendMessage(ChatColor.RED + getConfig().getString("syntax-setstock"));
+						}
+					}else{
+						sender.sendMessage(ChatColor.RED + getConfig().getString("syntax-setstock"));
+					}
+				}else{
+					sender.sendMessage(ChatColor.RED + getConfig().getString("syntax-setstock"));
+				}
+			}
+		}
+		return false;
 	}
 }

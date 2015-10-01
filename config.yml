@@ -24,6 +24,7 @@ begin-making-shop: Hit the shop with the item you want to sell.
 shop-established: Shop has been established!
 destroy-again: Destroy the sign again to confirm destruction.
 destroy-success: Shop destroyed!
+stock-success: Shop stock adjusted!
 #Error Messages
 already-making-shop: Finish making your other shop before attempting to create another one.
 finish-other-shop: Finish making your shop before conducting a transaction.
@@ -32,6 +33,9 @@ shop-being-made: Someone is making a shop here. You cannot destroy it.
 shop-is-owned: You cannot destroy someone else's shop.
 not-sneaking: You must be sneaking to destroy a shop.
 no-permission-creation: You do not have permission to make a shop.
+no-permission-setstock: You do not have permission to adjust a shop's stock.
 not-exist: This shop does not exist.
 invalid-item: You cannot sell this.
 attached-shop: That block is attached to a shop.
+syntax-setstock: /ethermarket setstock <number>
+look-at-sign: You must be looking at a shop to use this command.

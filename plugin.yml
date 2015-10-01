@@ -6,5 +6,7 @@ commands:
 permissions:
     ethermarket.admin.destroyothershop: #Allows the destruction of someone else's shop
         default: op
+    ethermarket.admin.setstock: #Allows the manual adjusting of a shop's stock
+        default: op
     ethermarket.player.makeshop: #Allows the creation of a shop
         default: true
