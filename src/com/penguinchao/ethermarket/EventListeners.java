@@ -9,6 +9,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPhysicsEvent;
+import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -217,9 +220,41 @@ public class EventListeners implements Listener {
 	}
 	@EventHandler
 	public void onPlayerLogout(PlayerQuitEvent event){
-		//TODO remove player from all lists
 		main.PlayerMakingShop.remove(event.getPlayer().getDisplayName());
 		main.ActivePlayerShop.remove(event.getPlayer().getDisplayName());
 		main.PlayerDestroyingShop.remove(event.getPlayer().getDisplayName());
+	}
+	@EventHandler
+	public void onBlockDestroy(BlockBreakEvent event){
+		if(main.eventFunctions.isAttachedToShop( event.getBlock() )){
+			if(event.getPlayer() != null){
+				main.messages.configError(event.getPlayer(), "attached-shop");
+			}
+			event.setCancelled(true);
+		}else{
+			main.messages.debugOut("Block is not attached to a shop");
+		}
+	}
+	@EventHandler
+	public void onPistonPush(BlockPistonExtendEvent event){
+		//TODO Remember: GetBlock gets the piston
+		//Get a hashmap of the blocks moved, then iterate through it
+	}
+	@EventHandler
+	public void onPistonRetract(BlockPistonRetractEvent event){
+		//TODO Remember: GetBlock gets the piston
+		//Get a hashmap of the blocks moved, then iterate through it
+	}
+	public void onGravityCheck(BlockPhysicsEvent event){
+		if(event.getBlock().getType() == Material.SAND || event.getBlock().getType() == Material.GRAVEL){
+			//This is a block that can fall
+			if(main.eventFunctions.isAttachedToShop(event.getBlock())){
+				event.setCancelled(true);
+			}else{
+				return;
+			}
+		}else{
+			return;
+		}
 	}
 }

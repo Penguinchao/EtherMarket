@@ -34,3 +34,4 @@ not-sneaking: You must be sneaking to destroy a shop.
 no-permission-creation: You do not have permission to make a shop.
 not-exist: This shop does not exist.
 invalid-item: You cannot sell this.
+attached-shop: That block is attached to a shop.

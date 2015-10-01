@@ -3,6 +3,10 @@ package com.penguinchao.ethermarket;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -200,5 +204,89 @@ public class EventFunctions {
 			main.shops.setDestroyingShop(player.getDisplayName(), shopID);
 			return false;
 		}
+	}
+	public Boolean isAttachedToShop(Block block){
+		main.messages.debugOut("Checking if the block is attached to a sign ");
+		Sign[] attachedSigns = getAttachedSigns(block);
+		main.messages.debugOut("Looked up list of signs");
+		if(attachedSigns == null){
+			main.messages.debugOut("List empty");
+			return false;
+		}else if(attachedSigns.length == 0){
+			main.messages.debugOut("List empty");
+			return false;
+		}
+		main.messages.debugOut("List is not empty");
+		for(int i = 0; i < attachedSigns.length; i++){
+			main.messages.debugOut("Checking if sign is a shop #"+i);
+			main.messages.debugOut(attachedSigns[i].toString());
+			if( (((Sign) attachedSigns[i]).getLine(0) ).equals(main.getConfig().getString("sign-header"))){//TODO
+				main.messages.debugOut("Sign is a shop sign");
+				return true;
+			}else{
+				main.messages.debugOut("Sign is not a shop sign");
+			}
+		}
+		main.messages.debugOut("No signs are shops");
+		return false;
+	}
+	public Sign[] getAttachedSigns(Block block){
+		//Get nearby blocks
+		main.messages.debugOut("Getting adjacent blocks...");
+		Block[] adjacentBlocks = new Block[5];
+		Location origin = block.getLocation();
+		Integer originX = origin.getBlockX();
+		Integer originY = origin.getBlockY();
+		Integer originZ = origin.getBlockZ();
+		World originWorld = origin.getWorld();
+		Location above = new Location(originWorld, originX, originY + 1, originZ);
+		adjacentBlocks[0] = above.getBlock();
+		Location adjacent1 = new Location(originWorld, originX + 1, originY, originZ);
+		adjacentBlocks[1] = adjacent1.getBlock();
+		Location adjacent2 = new Location(originWorld, originX - 1, originY, originZ);
+		adjacentBlocks[2] = adjacent2.getBlock();
+		Location adjacent3 = new Location(originWorld, originX, originY, originZ + 1);
+		adjacentBlocks[3] = adjacent3.getBlock();
+		Location adjacent4 = new Location(originWorld, originX, originY, originZ - 1);
+		adjacentBlocks[4] = adjacent4.getBlock();
+		//Convert sign blocks into sign objects
+		main.messages.debugOut("Creating tempSign array");
+		Integer signCount = 0;
+		//org.bukkit.material.Sign[] tempSign = new org.bukkit.material.Sign[5];
+		Sign[] tempSignBlock = new Sign[5];
+		main.messages.debugOut("Converting sign blocks");
+		for(int i = 0; i < 5; i++){
+			if(adjacentBlocks[i].getType() == Material.WALL_SIGN || adjacentBlocks[i].getType() == Material.SIGN_POST){
+				main.messages.debugOut("Block is a sign");
+				//Block is a sign
+				org.bukkit.material.Sign thisSign = (org.bukkit.material.Sign) adjacentBlocks[i].getState().getData();
+				main.messages.debugOut("Testing if sign is attached to this block");
+			    if(adjacentBlocks[i].getRelative(thisSign.getAttachedFace()).equals(block)){
+			    	main.messages.debugOut("This sign is attached");
+			    	//Sign is attached to this block
+			    	//main.messages.debugOut("Saving material.sign");
+			    	//tempSign[signCount] = thisSign;
+			    	main.messages.debugOut("Saving block.sign");
+			    	tempSignBlock[signCount] = (Sign) adjacentBlocks[i].getState();
+			    	main.messages.debugOut("Moving on to next iteration");
+			    	signCount++;
+			    }else{
+			    	main.messages.debugOut("This sign is not attached");
+			    }
+			}else{
+				main.messages.debugOut("Block is not a sign");;
+			}
+		}
+		if(signCount == 0){
+			main.messages.debugOut("Sign count is zero. Returning null");
+			return null;
+		}
+		main.messages.debugOut("Sign count is "+signCount);
+		Sign[] returnMe = new Sign[signCount];
+		for(int i = 0; i < signCount; i++){
+			returnMe[i] = tempSignBlock[i];
+		}
+		main.messages.debugOut("Returning attached signs");
+		return returnMe;
 	}
 }
