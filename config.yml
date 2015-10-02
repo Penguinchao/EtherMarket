@@ -7,7 +7,7 @@ mysqlDatabase: EtherMarket
 
 #---General Settings---
 #Excessive debug logging? Please use this and post your console log when asking for help
-debugenabled: true
+debugenabled: false
 #Adds a "Purchased from [username]" lore to valuable, unstackable items that are bought through the shops
 item-receipt: true
 item-receipt-text: Purchased from

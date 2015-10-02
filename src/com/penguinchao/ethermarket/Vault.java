@@ -36,28 +36,4 @@ public class Vault {
 		main.messages.debugOut("balance is: "+returnMe);
 		return returnMe;
 	}
-	/*
-	public void changeVaultBalance(UUID playerUUID, float amount){ //Changes the vault balance of the specified player by the given amount; Negative numbers ARE allowed
-		main.messages.debugOut("Changing vault balance...");
-		double amountDouble = Double.valueOf(amount);
-		double absoluteValueDouble = Math.abs(amountDouble);
-		org.bukkit.OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID );
-		if(amountDouble == 0){
-			//Do nothing
-			main.messages.debugOut("Value is zero -- skipping");
-		}else if(amountDouble > 0){
-			//Number is positive -- Deposit
-			main.messages.debugOut("Depositing to seller: "+absoluteValueDouble);
-			main.eco.depositPlayer(player, absoluteValueDouble);
-		}else if(amountDouble < 0) {
-			//Number is negative -- Withdraw
-			main.messages.debugOut("Withdrawing from buyer: "+absoluteValueDouble);
-			main.eco.withdrawPlayer(player, absoluteValueDouble);
-		}else {
-			main.messages.debugOut("Amount is not above, below, or at zero -- is it null?");
-			return;
-		}
-		main.messages.debugOut("Done!");
-	}
-	*/
 }

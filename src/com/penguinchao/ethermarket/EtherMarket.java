@@ -6,6 +6,7 @@ import java.util.HashMap;
 import net.milkbowl.vault.economy.Economy;
 
 import org.apache.commons.lang.math.NumberUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -31,6 +32,7 @@ public class EtherMarket extends JavaPlugin {
 	public EventFunctions eventFunctions;
 	public EventListeners eventListeners;
 	public Commands commands;
+
 	//Methods
 	@Override
 	public void onEnable(){
@@ -45,17 +47,18 @@ public class EtherMarket extends JavaPlugin {
 		eventFunctions = new EventFunctions(this);
 		eventListeners = new EventListeners(this);
 		commands = new Commands(this);
-		vault.setupEconomy();
-		//TODO Check vault dependencies and database, and if not setup, disable plugin with warning
+		if(vault.setupEconomy() == false ){
+			getLogger().info("Vault is not enabled. Disabling EtherMarket...");
+			Bukkit.getPluginManager().disablePlugin(this);
+		}
 	}
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) { 
 		if (cmd.getName().equalsIgnoreCase("ethermarket") || cmd.getName().equalsIgnoreCase("em") ){
 			if(args.length == 0){
-				//Player gave no arguments -- Sending plugin list
+				//Player gave no arguments -- Sending command list
 				commands.showHelp(sender);
 			}else if(args[0].equalsIgnoreCase("setstock")){
-				//Player attempting to setstock
 				if(args.length == 2){
 					if(NumberUtils.isNumber(args[1])){
 						Integer newStock = Integer.parseInt(args[1]);

@@ -112,7 +112,7 @@ public class EventListeners implements Listener {
 			return;
 		}
 		//Check player's permissions
-		if (event.getPlayer().hasPermission("pengumarket.player.makeshop")){
+		if (event.getPlayer().hasPermission("ethermarket.player.makeshop")){
 			main.messages.debugOut("Player has permission to make a shop");
 		}else{
 			main.messages.configError(event.getPlayer(), "no-permission-creation");
@@ -186,7 +186,9 @@ public class EventListeners implements Listener {
 		//Check shop ownership
 		if(event.getPlayer().getUniqueId().equals(shopOwner)){
 			main.messages.debugOut("Player owns the shop");
-		}else{
+		} else if(event.getPlayer().hasPermission("ethermarket.admin.destroyothershop")){
+			main.messages.debugOut("Player does not own shop, but does have ethermarket.admin.destroyothershop");
+		} else{
 			main.messages.configError(event.getPlayer(), "shop-is-owned");
 			main.messages.debugOut("Player does not own shop");
 			event.setCancelled(true);
