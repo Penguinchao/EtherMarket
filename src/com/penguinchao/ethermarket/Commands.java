@@ -21,8 +21,9 @@ public class Commands {
 		}
 	}
 	private String[] getHelpList(){
-		String[] returnMe = new String[1];
-		returnMe[0] = "/ethermarket setstock <New Stock>";
+		String[] returnMe = new String[2];
+		returnMe[0] = " Sets the stock of the shop that is being looked at:";
+		returnMe[1] = "- /ethermarket setstock <New Stock>";
 		return returnMe;
 	}
 	public void setStock(CommandSender sender, Integer newStock) {

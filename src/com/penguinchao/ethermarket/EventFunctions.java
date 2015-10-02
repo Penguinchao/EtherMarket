@@ -128,6 +128,7 @@ public class EventFunctions {
 			main.eco.depositPlayer(buyerPlayer, totalValue);
 			main.messages.debugOut("Changing buyer's vault balance");
 			main.eco.withdrawPlayer(sellerPlayer, totalValue);
+			main.database.logTransaction(UUID.fromString(shopUUID), UUID.fromString(userUUID), amount, totalValue, shopID, shopItem.toString(), false);
 		}
 		main.messages.debugOut("Removing player's items");
 		main.inventory.removePlayerItem(player, shopItem, shopItem.getAmount());
@@ -143,7 +144,6 @@ public class EventFunctions {
 		main.messages.debugOut("Getting user UUID");
 		String userUUID = player.getUniqueId().toString();
 		main.messages.debugOut(userUUID);
-		main.messages.debugOut("Player does not own shop");
 		ItemStack shopItem = main.shops.getShopItem(shopID, sneaking, seller);
 		float totalValue = shopItem.getAmount()*main.shops.getShopSellPrice(shopID);
 		main.messages.debugOut("Getting stock");
@@ -191,6 +191,7 @@ public class EventFunctions {
 			main.eco.depositPlayer(sellerPlayer, finalValue);
 			main.messages.debugOut("Changing player's vault balance");
 			main.eco.withdrawPlayer(buyerPlayer, finalValue);
+			main.database.logTransaction(UUID.fromString(shopUUID), UUID.fromString(userUUID), amount, totalValue, shopID, shopItem.toString(), true);
 		}
 		main.inventory.softAddItem(shopItem, player);
 		main.shops.setStock(shopID, main.shops.getStock(shopID)-shopItem.getAmount() );

@@ -15,7 +15,10 @@ public class Database {
 		databaseConnect();
 		checkTables();
 	}
-	public void logTransaction(UUID shopOwner, UUID customer, Integer amount, Integer shopID, String itemString, Boolean buying){
+	public void logTransaction(UUID shopOwner, UUID customer, Integer amount, float totalValue, Integer shopID, String itemString, Boolean buying){
+		if(main.getConfig().getString("log-transactions").equals("false")){
+			return;
+		}
 		String logString;
 		logString = customer+" ";
 		if(buying){
@@ -23,11 +26,30 @@ public class Database {
 		}else{
 			logString = logString+"sold ";
 		}
-		logString = logString+amount+" items ("+itemString+") through a shop belonging to "+shopOwner;
-		if(main.getConfig().getString("log-transactions").equals("true")){
-			main.getLogger().info("[Transaction] "+logString);
+		logString = logString+amount+" items ("+itemString+") through a shop belonging to "+shopOwner+" for "+totalValue;
+		main.getLogger().info("[Transaction] "+logString);
+		String query = "INSERT INTO transactions (shop_id, customer, shop_owner, item, quantity, total_cost, purchase) VALUES ('" +
+				shopID + "', '" +
+				customer.toString() + "', '" +
+				shopOwner.toString() + "', '" +
+				itemString + "', '" +
+				amount + "', '" +
+				totalValue + "', '" +
+				boolToInt(buying) +"');";
+			
+			try {
+				PreparedStatement sql = main.connection.prepareStatement(query);
+				sql.executeUpdate();
+			} catch (SQLException e) {
+				main.getLogger().info("[ERROR] Cannot log transaction in database!");
+				e.printStackTrace();
+			}
+	}
+	public int boolToInt(Boolean option){
+		if(option){
+			return 1;
 		}else{
-			main.messages.debugOut("Logging transaction: "+logString);
+			return 0;
 		}
 	}
 	public void databaseConnect(){
@@ -85,7 +107,7 @@ public class Database {
 		if(main.getConfig().getString("log-transactions").equals("true")){
 			main.messages.debugOut("Transaction logging is enabled. Creating tables...");
 			String transactionString1 = "CREATE TABLE IF NOT EXISTS `transactions` ( `transaction_id` INT(11) NOT NULL AUTO_INCREMENT , "+
-					"`shop_id` INT(11) NOT NULL , `customer` VARCHAR(36) NOT NULL , `shop_owner` VARCHAR(36) NOT NULL , `item` VARCHAR(150) NOT NULL , "+
+					"`shop_id` INT(11) NOT NULL , `customer` VARCHAR(36) NOT NULL , `shop_owner` VARCHAR(36) NOT NULL , `item` VARCHAR(250) NOT NULL , "+
 					"`quantity` INT(11) NOT NULL , `total_cost` FLOAT NOT NULL , `purchase` BOOLEAN NOT NULL , UNIQUE (`transaction_id`) )";
 			String transactionString2 = "ALTER TABLE `transactions` DROP PRIMARY KEY;";
 			String transactionString3 = "ALTER TABLE `transactions` ADD PRIMARY KEY (`transaction_id`); ";
