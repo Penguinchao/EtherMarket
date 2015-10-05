@@ -1,8 +1,12 @@
 main: com.penguinchao.ethermarket.EtherMarket
 version: 1.0
 name: EtherMarket
-
+author: Penguinchao
+depend: [Vault]
 commands:
+    ethermarket:
+        description: Admin command for EtherMarket
+        aliases: [em]
 permissions:
     ethermarket.admin.destroyothershop: #Allows the destruction of someone else's shop
         default: op

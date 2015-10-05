@@ -3,6 +3,5 @@ This is a chestless shop plugin for Bukkit/Spigot/Cauldron. The shops are stored
 
 
 # TODO:
--Add functionality to log transactions in the database
 -Add support for multiworld economies
 -Create web portal that looks up shops and transactions
