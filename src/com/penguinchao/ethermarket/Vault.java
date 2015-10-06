@@ -25,7 +25,7 @@ public class Vault {
         main.eco = rsp.getProvider();
         return main.eco != null;
     }
-	public double getVaultBalance(UUID playerUUID){ //Returns the player's vault balance in the form of a double; I have no idea why they use memory-hogging doubles, but it's vault's method of storage, not mine
+	public double getVaultBalance(UUID playerUUID){ //Returns the player's vault balance in the form of a double
 		main.messages.debugOut("getting player from UUID");
 		org.bukkit.OfflinePlayer player = Bukkit.getOfflinePlayer(playerUUID );
 		
