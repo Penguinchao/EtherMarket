@@ -66,3 +66,6 @@ invalid-item: You cannot sell this.
 attached-shop: That block is attached to a shop.
 syntax-setstock: /ethermarket setstock <number>
 look-at-sign: You must be looking at a shop to use this command.
+insufficient-stock: Insufficient stock
+insufficient-funds: Insufficient funds
+not-enough-items: You do not have enough items.
