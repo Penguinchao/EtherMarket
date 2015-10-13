@@ -3,5 +3,7 @@ This is a chestless shop plugin for Bukkit/Spigot/Cauldron. The shops are stored
 
 
 # TODO:
--Add support for multiworld economies
--Create web portal that looks up shops and transactions
+1) Add ATM mechanics
+2) Add WorldEdit Listener to prevent modification of shop blocks
+3) Add support for multiworld economies
+4) Create web portal that looks up shops and transactions
