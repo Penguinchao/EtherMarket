@@ -102,7 +102,7 @@ public class EventFunctions {
 			main.messages.debugOut("User owns shop");
 		} else if(main.vault.getVaultBalance(UUID.fromString(main.shops.getShopOwner(shopID))) < totalValue ){
 			main.messages.debugOut("Seller insufficient funds");
-			//TODO notification
+			main.messages.configError(player, "insufficient-funds");
 			return;
 		}else{
 			main.messages.debugOut("Seller can pay");
@@ -110,17 +110,16 @@ public class EventFunctions {
 		//Check player inventory
 		if(main.inventory.getInventoryItemCount(player, shopItem) < amount){
 			main.messages.debugOut("Not enough items in player's inventory");
+			main.messages.configError(player, "not-enough-items");
 			return;
-			//TODO notification
 		}else{
 			main.messages.debugOut("Player has enough items in inventory");
 		}
 		//Do transaction
 		if( shopUUID.equals(userUUID) ){
 			main.messages.debugOut("Shop owner UUID is the same: "+shopUUID);
-			//TODO Deposit notification
 		}else{
-			//TODO Sale notification
+			//TODO Sale notification to shop owner if online
 			org.bukkit.OfflinePlayer sellerPlayer = Bukkit.getOfflinePlayer(UUID.fromString(shopUUID));
 			org.bukkit.OfflinePlayer buyerPlayer = Bukkit.getOfflinePlayer(UUID.fromString(userUUID));
 			main.messages.debugOut("Shop owner and player UUIDs are different");
@@ -145,14 +144,14 @@ public class EventFunctions {
 		String userUUID = player.getUniqueId().toString();
 		main.messages.debugOut(userUUID);
 		ItemStack shopItem = main.shops.getShopItem(shopID, sneaking, seller);
-		float totalValue = shopItem.getAmount()*main.shops.getShopSellPrice(shopID);
+		float totalValue = shopItem.getAmount()*main.shops.getShopBuyPrice(shopID);
 		main.messages.debugOut("Getting stock");
 		Integer stock = main.shops.getStock(shopID);
 		Integer amount = shopItem.getAmount();
 		//Check stock
 		if(stock < amount ){
 			main.messages.debugOut("Insufficient stock");
-			//TODO message
+			main.messages.configError(player, "insufficient-stock");
 			return;
 		}else{
 			main.messages.debugOut("Sufficient stock");
@@ -163,7 +162,7 @@ public class EventFunctions {
 			main.messages.debugOut("User owns shop");
 		} else if(main.vault.getVaultBalance(player.getUniqueId()) < totalValue ){
 			main.messages.debugOut("Buyer insufficient funds");
-			//TODO notification
+			main.messages.configError(player, "insufficient-funds");
 			return;
 		}else{
 			main.messages.debugOut("Buyer can pay");
@@ -179,7 +178,6 @@ public class EventFunctions {
 		//Do transaction
 		if( shopUUID.equals(userUUID) ){
 			main.messages.debugOut("Shop owner UUID is the same: "+shopUUID);
-			//TODO Deposit notification
 		}else{
 			//TODO Sale notification
 			// ;potyuiop[
