@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.lang.math.NumberUtils;
@@ -458,16 +459,21 @@ public class Shops {
 	public void emptyShopStock(Player player, Integer shopID){
 		//Finish this
 		main.messages.debugOut("Giving player shop's contents");
-		ItemStack shopItem = getShopItem(shopID, true, player.getDisplayName() );
 		Integer amountToGive = getStock(shopID);
-		Integer stackSize = shopItem.getMaxStackSize();
-		while(stackSize < amountToGive){
+		if(amountToGive > 0){
+			main.messages.debugOut("Shop has a stock greater than zero");
+			ItemStack shopItem = getShopItem(shopID, true, player.getDisplayName() );
+			Integer stackSize = shopItem.getMaxStackSize();
+			while(stackSize < amountToGive){
+				main.inventory.softAddItem(shopItem, player);
+				amountToGive -= stackSize;
+			}
+			shopItem.setAmount(amountToGive);
 			main.inventory.softAddItem(shopItem, player);
-			amountToGive -= stackSize;
+			main.messages.debugOut("Shop is now empty");
+		}else{
+			main.messages.debugOut("Shop did not have any contents -- Nothing to give");
 		}
-		shopItem.setAmount(amountToGive);
-		main.inventory.softAddItem(shopItem, player);
-		main.messages.debugOut("Shop is now empty");
 		setStock(shopID, 0);
 	}
 	public Boolean shopBeingEstablished(Integer x, Integer y, Integer z, String world){ //Looks through the list of players making shops and determines if the block specified is a shop in-progress
@@ -500,10 +506,11 @@ public class Shops {
 		}
 		return false;
 	}
+	@SuppressWarnings("deprecation")
 	public Boolean isValidMaterial(Material material){//Compares material to a list of unsupported item types; returns true if material is not within that list
-		Material[] invalidMaterials = {Material.WRITTEN_BOOK, Material.AIR};
-		for(int i = 0; i<invalidMaterials.length; i++){
-			if(invalidMaterials[i].equals(material)){
+		List<Integer> invalidMaterials = main.getConfig().getIntegerList("banned-items");
+		for(Integer i : invalidMaterials){
+			if(Material.getMaterial(i).equals(material)){
 				return false;
 			}
 		}

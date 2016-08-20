@@ -18,6 +18,16 @@ log-transactions: true
 #Changing these WILL cause problems if shops and ATMs have been created
 sign-header: [Shop]
 
+#--BANNED ITEMS---
+#These are the item IDs that will not be allowed to be sold or bought
+#Use these on items that may not properly be converted through the database
+banned-items:
+- 0
+- 387
+- 358
+- 401
+- 402
+
 #---Enchantment Names---
 ARROW_DAMAGE: Power
 ARROW_FIRE: Flame

@@ -66,6 +66,11 @@ public class Enchantment {
 		return false;
 	}
 	public String cleanEnchantmentName(String name){ //Formats the enchantment name to be more user-friendly for display -- names are changed in the config
-		return main.getConfig().getString(name);
+		String returnMe = main.getConfig().getString(name);
+		if(returnMe == null){
+			return name;
+		}else{
+			return returnMe;
+		}
 	}
 }

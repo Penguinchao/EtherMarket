@@ -1,5 +1,5 @@
 main: com.penguinchao.ethermarket.EtherMarket
-version: 1.2
+version: 1.4
 name: EtherMarket
 author: Penguinchao
 depend: [Vault]
