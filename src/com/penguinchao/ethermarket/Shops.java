@@ -80,7 +80,8 @@ public class Shops {
 		}
 	}
 	public void establishShop(String owner, String establisher, String establisherName, Integer x, Integer y, Integer z, World world, ItemStack item, Float buy, Float sell){ //Adds the shop to the database and unmarks the player as making a shop
-		String displayName = item.getItemMeta().getDisplayName();
+            main.database.checkConnection();
+            String displayName = item.getItemMeta().getDisplayName();
 		String material = item.getType().toString();
 		String enchantments = main.enchantment.enchantmentsToString(item);
 		String data = item.getData().toString();
@@ -113,6 +114,7 @@ public class Shops {
 	}
 	public float getShopBuyPrice(Integer shopID){ //Returns the cost to buy a single item from the specified shop
 		//Returns the price that it costs the customer to buy one item
+                main.database.checkConnection();
 		String query = "SELECT `buy` FROM `shops` WHERE `shop_id`="+shopID+";";
 		main.messages.debugOut("Executing query: "+ query);
 		String buyPrice = "0";
@@ -132,6 +134,7 @@ public class Shops {
 	}
 	public float getShopSellPrice(Integer shopID){ //Returns the asking price to sell a single item to the specified shop
 		//Returns the price that the shop owner will pay the consumer for one item
+                main.database.checkConnection();
 		String query = "SELECT `sell` FROM `shops` WHERE `shop_id`="+shopID+";";
 		main.messages.debugOut("Executing query: "+ query);
 		String sellPrice = "0";
@@ -151,7 +154,8 @@ public class Shops {
 	}
 	public ItemStack getShopItem(Integer shopID, Boolean fullStack, String seller){ //Returns the itemStack that is attempting to be purchased
 		//Converts database strings for this item to an ItemStack
-		main.messages.debugOut("getShopItem: Checking shop's existence");
+                main.database.checkConnection();
+                main.messages.debugOut("getShopItem: Checking shop's existence");
 		if(shopID == 0){
 			main.messages.debugOut("Shop ID is ZERO, which is a placeholder for nonexistent shops -- returning a stack of 0 air");
 			ItemStack returnMeError = new ItemStack(Material.AIR, 0);
@@ -276,6 +280,7 @@ public class Shops {
 		return shopItem;
 	}
 	public String getShopOwner(Integer shopID){ //Returns the owner's UUID of the specified shop from the database
+                main.database.checkConnection();
 		main.messages.debugOut("getShopOwner: Checking shop's existence");
 		if(shopID == 0){
 			main.messages.debugOut("Shop ID is ZERO, which is a placeholder for shops that don't exist -- returning empty string");
@@ -298,6 +303,7 @@ public class Shops {
 		return "null";
 	}
 	public Integer getShopID(Integer x, Integer y, Integer z, World world){ //Return the shop ID through database queries
+                main.database.checkConnection();
 		Integer shopID;
 		String query = "SELECT shop_id FROM `shops` WHERE `x`="+x+
 				" AND `y`="+y+
@@ -323,6 +329,7 @@ public class Shops {
 		return shopID;
 	}
 	public Integer getStock(Integer shopID){ //Returns the stock of the shop through database queries
+                main.database.checkConnection();
 		main.messages.debugOut("getStock: Checking shop's existence");
 		if(shopID == 0){
 			main.messages.debugOut("Shop ID is ZERO, which is a placeholder for nonexistent shops -- returning ZERO");
@@ -346,6 +353,7 @@ public class Shops {
 		return 0;
 	}
 	public void setStock(Integer shopID, Integer stock){ //Changes the stock in the database for the specified shop
+                main.database.checkConnection();
 		main.messages.debugOut("setStock: Checking shop's existence");
 		if(shopID == 0){
 			main.messages.debugOut("Shop ID is ZERO, which is a placeholder for nonexistent shops -- doing nothing");
@@ -363,6 +371,7 @@ public class Shops {
 		}
 	}
 	public void showShopInfo(Integer shopID, Player player){ //Display's the shop's information to the specified player
+                main.database.checkConnection();
 		main.messages.debugOut("showShopInfo: Checking shop's existence");
 		if(shopID == 0){
 			main.messages.debugOut("Shop ID is ZERO, which is a placeholder for nonexistent shops -- returning empty string");
@@ -441,6 +450,7 @@ public class Shops {
 		main.PlayerDestroyingShop.remove(playerName);
 	}
 	public void deleteShop(int shopID){//Deletes shops from the database with the specified shop ID
+                main.database.checkConnection();
 		if(shopID > 0){
 			String query = "DELETE FROM shops WHERE shop_id="+shopID+";";
 			main.messages.debugOut("Performing Deletion Query:");

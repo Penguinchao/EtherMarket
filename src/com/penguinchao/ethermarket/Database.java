@@ -4,12 +4,14 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 
 public class Database {
 	private EtherMarket main;
-	
+	private boolean couldConnect;
 	public Database(EtherMarket etherMarket) {
 		main = etherMarket;
 		databaseConnect();
@@ -137,4 +139,17 @@ public class Database {
 			}
 		}
 	}
+        public void checkConnection(){
+            if(!main.databaseConnected){
+                return;
+            }
+            try {
+                if(main.connection.isClosed()){
+                    main.getLogger().info("Database connection was closed. Reopening it.");
+                    databaseConnect();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 }

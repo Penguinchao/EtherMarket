@@ -18,7 +18,7 @@ public class EventFunctions {
 		main = etherMarket;
 	}
 	public void activateShop(Sign sign, Player player, Boolean sneaking, Boolean rightClick){ //This happens when a player hits a sign with a shop header
-		main.messages.debugOut("Activating shop");
+                main.messages.debugOut("Activating shop");
 		Integer shopID = main.shops.getShopID(sign.getX(), sign.getY(), sign.getZ(), sign.getWorld());
 		main.messages.debugOut("Obtained shop ID is: "+shopID);
 		String[] buyLine = sign.getLine(2).split(" ");
