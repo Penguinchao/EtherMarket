@@ -1,10 +1,12 @@
 package com.penguinchao.ethermarket;
 
+import java.util.Set;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 public class Commands {
@@ -46,7 +48,7 @@ public class Commands {
 		}
 		//Get block that player is looking at
 		@SuppressWarnings("deprecation")
-		Block targetBlock = player.getTargetBlock(null, 6);
+		Block targetBlock = player.getTargetBlock((Set<Material>) null, 6);
 		if(targetBlock == null){
 			main.messages.debugOut("Block is null");
 			main.messages.configError(player, "look-at-sign");

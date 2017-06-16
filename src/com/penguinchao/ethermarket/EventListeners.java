@@ -1,5 +1,6 @@
 package com.penguinchao.ethermarket;
 
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Material;
@@ -41,7 +42,7 @@ public class EventListeners implements Listener {
 				main.messages.debugOut("RIGHT_CLICK_BLOCK");
 				activatedBlock = event.getClickedBlock();
 			}else if(event.getAction() == Action.RIGHT_CLICK_AIR){
-				activatedBlock = event.getPlayer().getTargetBlock(null, 6);
+				activatedBlock = event.getPlayer().getTargetBlock((Set<Material>) null, 6);
 				main.messages.debugOut("RIGHT_CLICK_AIR");
 			}else{
 				main.messages.debugOut("Event not found -- This should not happen.");
