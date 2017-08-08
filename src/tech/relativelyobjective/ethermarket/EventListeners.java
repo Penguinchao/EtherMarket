@@ -1,4 +1,4 @@
-package com.penguinchao.ethermarket;
+package tech.relativelyobjective.ethermarket;
 
 import java.util.Set;
 import java.util.UUID;
@@ -8,6 +8,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -26,7 +27,6 @@ public class EventListeners implements Listener {
 		main = etherMarket;
 		main.getServer().getPluginManager().registerEvents(this, main);
 	}
-	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onSignActivate(PlayerInteractEvent event){ //Used to interact with an existing shop
 		main.messages.debugOut("PlayerInteractEvent");
@@ -136,7 +136,7 @@ public class EventListeners implements Listener {
 		event.setLine(3, event.getPlayer().getDisplayName());
 		main.shops.setMakingShop(event.getPlayer(), event.getPlayer(), event.getBlock().getX(), event.getBlock().getY(), event.getBlock().getZ(), event.getBlock().getWorld());
 	}
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onSignDestroy(BlockBreakEvent event){ //Used to prevent unauthorized, direct destruction of the shop block
 		main.messages.debugOut("BlockBreakEvent");
 		//Check Block Type
@@ -224,14 +224,14 @@ public class EventListeners implements Listener {
 			return;
 		}
 	}
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerLogout(PlayerQuitEvent event){
 		main.messages.debugOut("PlayerQuitEvent");
 		main.PlayerMakingShop.remove(event.getPlayer().getDisplayName());
 		main.ActivePlayerShop.remove(event.getPlayer().getDisplayName());
 		main.PlayerDestroyingShop.remove(event.getPlayer().getDisplayName());
 	}
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockDestroy(BlockBreakEvent event){
 		main.messages.debugOut("BlockBreakEvent");
 		if(main.eventFunctions.isAttachedToShop( event.getBlock() )){
@@ -243,9 +243,8 @@ public class EventListeners implements Listener {
 			main.messages.debugOut("Block is not attached to a shop");
 		}
 	}
-	
 	//This Event is was commented out, because the physics event will check this 
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onPistonPush(BlockPistonExtendEvent event){
 		main.messages.debugOut("BlockPistonExtendEvent");
 		//Get a hashmap of the blocks moved, then iterate through it
@@ -254,7 +253,7 @@ public class EventListeners implements Listener {
 			event.setCancelled(true);
 		}
 	}
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onPistonRetract(BlockPistonRetractEvent event){
 		main.messages.debugOut("BlockPistonRetractEvent");
 		//Get a hashmap of the blocks moved, then iterate through it
@@ -262,7 +261,7 @@ public class EventListeners implements Listener {
 			event.setCancelled(true);
 		}
 	}
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onPhysicsCheck(BlockPhysicsEvent event){
 		//Commented out the debug for the physics events, because it made the console useless
 		//main.messages.debugOut("BlockPhysicsEvent");
@@ -278,7 +277,7 @@ public class EventListeners implements Listener {
 		//	return;
 		//}
 	}
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onBurn(BlockBurnEvent event){
 		if( main.eventFunctions.isAttachedToShop(event.getBlock()) ){
 			event.setCancelled(true);
@@ -293,7 +292,7 @@ public class EventListeners implements Listener {
 			return;
 		}
 	}
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onExplode(EntityExplodeEvent event){
 		main.messages.debugOut("EntityExplodeEvent");
 		for(Block block : event.blockList()){

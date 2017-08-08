@@ -1,4 +1,4 @@
-package com.penguinchao.ethermarket;
+package tech.relativelyobjective.ethermarket;
 
 import java.sql.Connection;
 import java.util.HashMap;

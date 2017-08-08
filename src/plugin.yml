@@ -1,7 +1,7 @@
-main: com.penguinchao.ethermarket.EtherMarket
-version: 1.4
+main: tech.relativelyobjective.ethermarket.EtherMarket
+version: 1.5
 name: EtherMarket
-author: Penguinchao
+author: ReltivlyObjectv
 depend: [Vault]
 commands:
     ethermarket:

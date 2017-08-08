@@ -1,4 +1,4 @@
-package com.penguinchao.ethermarket;
+package tech.relativelyobjective.ethermarket;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
